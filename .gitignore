@@ -17,3 +17,5 @@
 /HiBlogs/HiBlogs.Web/obj
 /HiBlogs/HiBlogs.WebApi/obj
 /HiBlogs/ToolConsole/obj
+/HiBlogs/HiBlogs.Web/appsettings.json
+/HiBlogs/HiBlogs.Web/appsettings.Development.json

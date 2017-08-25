@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using HiBlogs.EntityFramework.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 
 namespace HiBlogs.Web
 {
@@ -22,6 +24,11 @@ namespace HiBlogs.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            //注意：一定要加 sslmode=none 
+            var connection = Configuration.GetConnectionString("MySqlConnection");
+            services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(connection));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

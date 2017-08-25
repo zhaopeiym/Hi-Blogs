@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj" />
+  </ItemGroup>
+
 </Project>
