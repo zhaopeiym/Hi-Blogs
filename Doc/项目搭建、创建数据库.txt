@@ -1,0 +1,5 @@
+-- 20170825
+1、在HiBlogs.Core中导入 Microsoft.EntityFrameworkCore 2.0、Microsoft.EntityFrameworkCore.Tools 2.0、Pomelo.EntityFrameworkCore.MySql 2.0
+2、引用关系 HiBlogs.Core -> HiBlogs.EntityFramework -> HiBlogs.Application -> HiBlogs.Web
+3、在HiBlogs.Core简历实体，HiBlogs.EntityFramework中建立Context。
+4、执行nuget命令 Add-Migration InitialCreate、Update-Database

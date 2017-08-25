@@ -9,17 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogsMigration", "BlogsMigr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolConsole", "ToolConsole\ToolConsole.csproj", "{DF1ECE70-716D-47BD-B32E-CBAD7879ED35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.Web", "HiBlogs.Web\HiBlogs.Web.csproj", "{1117779A-FA5B-4803-80D4-7EE341EFA384}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.Web", "HiBlogs.Web\HiBlogs.Web.csproj", "{1117779A-FA5B-4803-80D4-7EE341EFA384}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.Core", "HiBlogs.Core\HiBlogs.Core.csproj", "{8494B409-0881-41B9-812A-E3855A7B8EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.Core", "HiBlogs.Core\HiBlogs.Core.csproj", "{8494B409-0881-41B9-812A-E3855A7B8EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.EntityFramework", "HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj", "{87AD0DB6-8F5C-4183-9250-43DCD9D5F68E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.EntityFramework", "HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj", "{87AD0DB6-8F5C-4183-9250-43DCD9D5F68E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.Application", "HiBlogs.Application\HiBlogs.Application.csproj", "{9BA97402-E4E7-4685-988F-2D016BF8ABDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.Application", "HiBlogs.Application\HiBlogs.Application.csproj", "{9BA97402-E4E7-4685-988F-2D016BF8ABDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.Infrastructure", "HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj", "{DB51F7CE-7037-423D-851C-3FD6005C1649}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.Infrastructure", "HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj", "{DB51F7CE-7037-423D-851C-3FD6005C1649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.WebApi", "HiBlogs.WebApi\HiBlogs.WebApi.csproj", "{C9CCC092-2686-47A1-872C-C3C495572336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.WebApi", "HiBlogs.WebApi\HiBlogs.WebApi.csproj", "{C9CCC092-2686-47A1-872C-C3C495572336}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
