@@ -2,4 +2,28 @@
     ViewData["Title"] = "博客迁移";
 }
 
-<p>博客迁移</p>
+<div class="mesg"></div>
+博客用户：<input type="text" class="userName" />
+<button type="button">迁移</button>
+
+@section scripts{
+    <script type="text/javascript">
+        $("button").click(function () {
+            var $this = $(this);
+            $this.prop("disabled", true);
+            $(".mesg").text("正在导入中...");
+            $.ajax({
+                url: "/api/BlogMigration/MigrationByUserName",
+                type: "post",
+                data: { "userName": $(".userName").val() },
+                success: function (sData) {
+                    $this.prop("disabled", false);                    
+                    $(".mesg").text("导入成功！");
+                },
+                error: function () {
+                    $(".mesg").text("导入失败！！！");
+                }
+            });
+        });
+    </script>    
+}

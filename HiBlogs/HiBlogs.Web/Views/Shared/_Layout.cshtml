@@ -9,11 +9,12 @@
     <title>@ViewData["Title"]</title>
     <style type="text/css">
         * {
-            padding:0px;
-            margin:0px;
+            padding: 0px;
+            margin: 0px;
             box-sizing: border-box;
             font-size: 18px;
         }
+
         .clearfix:before, .clearfix:after {
             content: "";
             display: table;
@@ -27,12 +28,14 @@
         .clearfix {
             zoom: 1; /* for ie6 & ie7 */
         }
+
         .body-content {
             background-color: #fff;
         }
     </style>
 </head>
 <body>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <div class="container body-content">
         @RenderBody()
     </div>

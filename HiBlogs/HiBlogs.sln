@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.WebApi", "HiBlogs.W
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1DDB327B-FBA0-4993-AC33-BC93BFD56DCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestBlogsMigration", "XUnitTestBlogsMigration\XUnitTestBlogsMigration.csproj", "{626CA33E-7174-4FF0-8852-C1B5B42575AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestBlogsMigration", "XUnitTestBlogsMigration\XUnitTestBlogsMigration.csproj", "{626CA33E-7174-4FF0-8852-C1B5B42575AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{CB840DF8-27F4-401A-9BF3-0D3CB74B5F42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

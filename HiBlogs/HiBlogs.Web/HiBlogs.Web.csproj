@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HiBlogs.Application\HiBlogs.Application.csproj" />
+    <ProjectReference Include="..\HiBlogs.WebApi\HiBlogs.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

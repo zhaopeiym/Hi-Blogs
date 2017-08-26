@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "后台管理";
+}
+
+<div id="content">
+
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $.ajax({
+            url: "/api/BlogManage/GetBlogs",
+            type: "post",
+            success: function (sData) {
+                var tempHtml = "";
+                for (var i = 0; i < sData.length; i++) {
+                    tempHtml += "<div>" + sData[i].title+"</div>";
+                }
+                $("#content").html(tempHtml);
+            }
+        });
+    </script>
+}
