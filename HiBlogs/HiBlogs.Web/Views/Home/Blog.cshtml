@@ -1,0 +1,45 @@
+﻿@model BlogViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+<style type="text/css">
+    * {
+        font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+        color:#808080;
+    }
+
+    .blogTopics {
+        border: 1px solid #dedede;
+        padding: 60px;
+        padding-bottom: 20px;
+        margin-top: 20px;
+        margin-bottom: 80px;
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+
+    .content {
+        margin-top:30px;
+    }
+
+        .content pre {
+            /*white-space: normal;
+            word-break: break-all;*/
+            /*word-wrap: break-word;
+            word-break: break-all;*/
+            overflow-x: auto;
+        }
+
+            .content pre code {
+            }
+
+    .blogTopics .postTitle {
+        color: #555454;
+        font-size: 23px;
+        text-align: center;       
+    }
+</style>
+<div class="blogTopics">
+    <h1 class="postTitle">@Model.Title</h1>
+    <div class="content">@Html.Raw(Model.Content)</div>
+</div>

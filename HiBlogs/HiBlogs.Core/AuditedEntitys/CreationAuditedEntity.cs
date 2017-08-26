@@ -15,5 +15,10 @@ namespace HiBlogs.Core.AuditedEntitys
         /// 创建人
         /// </summary>
         public virtual int? CreatorUserId { get; set; }
+
+        public CreationAuditedEntity()
+        {
+            CreationTime = DateTime.Now;//默认当前时间
+        }
     }
 }

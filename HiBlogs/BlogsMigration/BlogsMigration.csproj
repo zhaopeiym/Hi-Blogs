@@ -8,4 +8,8 @@
     <PackageReference Include="AngleSharp" Version="0.9.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

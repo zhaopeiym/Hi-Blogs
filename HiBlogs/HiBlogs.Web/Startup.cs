@@ -13,6 +13,10 @@ namespace HiBlogs.Web
 {
     public class Startup
     {
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        public static string connection;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,7 +30,7 @@ namespace HiBlogs.Web
             services.AddMvc();
 
             //注意：一定要加 sslmode=none 
-            var connection = Configuration.GetConnectionString("MySqlConnection");
+            connection = Configuration.GetConnectionString("MySqlConnection");
             services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(connection));
 
         }
@@ -48,6 +52,10 @@ namespace HiBlogs.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                   name: "areaRoute",
+                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

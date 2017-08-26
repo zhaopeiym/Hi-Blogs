@@ -1,5 +1,17 @@
--- 20170825
-1、在HiBlogs.Core中导入 Microsoft.EntityFrameworkCore 2.0、Microsoft.EntityFrameworkCore.Tools 2.0、Pomelo.EntityFrameworkCore.MySql 2.0
-2、引用关系 HiBlogs.Core -> HiBlogs.EntityFramework -> HiBlogs.Application -> HiBlogs.Web
-3、在HiBlogs.Core简历实体，HiBlogs.EntityFramework中建立Context。
-4、执行nuget命令 Add-Migration InitialCreate、Update-Database
+# 20170825
+# 使用ASP.NET Core 2.0 + MySql
+
+1. 在HiBlogs.Core中导入 Microsoft.EntityFrameworkCore 2.0、Microsoft.EntityFrameworkCore.Tools 2.0、Pomelo.EntityFrameworkCore.MySql 2.0
+1. 引用关系 HiBlogs.Core -> HiBlogs.EntityFramework -> HiBlogs.Application -> HiBlogs.Web
+1. 在HiBlogs.Core简历实体，HiBlogs.EntityFramework中建立Context。
+1. 执行nuget命令 Add-Migration InitialCreate、Update-Database
+1. 我使用的数据库客户端是 SQLyog，建好数据库后修改字符集 utf8、utf8_general_ci。http://www.jb51.net/article/30865.htm
+1. 注意：记得把 appsettings - 复制.json 修改成 appsettings.json，然后修改成自己对应的数据库连接
+
+# 20170826
+1. ToolConsole迁移博客、保存图片到本地、修改图片链接到迁移地址
+1. 简单的博客内容浏览
+1. 修改端口号、发布到阿里云服务器
+1. 调整首页、内容页
+1. 链接 找工作、留言板、聊天室
+

@@ -3,14 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <meta name="keywords" content="HiBlogs,嗨-博客,dotnetcore,开发者,程序猿,程序媛,开源,IT网站,好记吗" />
     <meta name="description" content="Hi-Blogs，ASP.NET Core 正式启动。只为技术而技术！！！" />
+    <meta name="keywords" content="HiBlogs,嗨-博客,dotnetcore,开发者,程序猿,程序媛,开源,IT网站,好记吗" />
+    <meta name="author" content="农码一生,BennyZhao" />
+    <title>@ViewData["Title"]</title>
+    <style type="text/css">
+        * {
+            padding:0px;
+            margin:0px;
+            box-sizing: border-box;
+            font-size: 18px;
+        }
+        .clearfix:before, .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+            overflow: hidden;
+        }
+
+        .clearfix {
+            zoom: 1; /* for ie6 & ie7 */
+        }
+        .body-content {
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
     <div class="container body-content">
-        @RenderBody() 
-    </div> 
+        @RenderBody()
+    </div>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,3 +1,87 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<BlogInfoViewModel>
+@{
+    ViewData["Title"] = "嗨-博客";
 }
+<style type="text/css">
+    * {
+        font-family: STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+    }
+
+    .navbar {
+        padding: 15px;
+        border-bottom: 1px solid #dedede;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        background-color: #ffffff;
+        opacity:0.9;
+    }
+
+        .navbar a {
+            color: #808080;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .navbar span.mesg {
+            font-size: 14px;
+            margin-left:5px;
+            color: #ff6a00;
+        }
+
+    .navbar-left {
+        float: left;
+        margin-left: 5px;
+    }
+
+    .navbar-right {
+        float: right;
+        margin-right: 5px;
+    }
+
+    .blogList {
+        margin-left: 20%;
+        margin-right: 20%;
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+
+        .blogList li {
+            list-style-type: none;
+            padding: 10px;
+            border: 1px solid #dedede;
+        }
+
+            .blogList li:nth-child(n+2) {
+                border-top: initial;
+            }
+
+        .blogList a {
+            color: #428bca;
+            text-decoration: none; 
+        }
+</style>
+<div>
+    <nav class="navbar clearfix">
+        <div class="navbar-left">
+            <a href="//haojima.net" class="navbar-brand">
+                嗨-博客
+            </a>
+            <span class="mesg">ASP.NET Core2.0 + CentOS7.3 只为技术而技术！！！</span>
+        </div>
+        <div class="navbar-right">
+            <a target="_blank" href="//job.haojima.net">找工作（实时综合查询）</a>
+            <a target="_blank" href="//socket.haojima.net">聊天室</a>
+            <a target="_blank" href="//messageboard.haojima.net">留言板</a>
+        </div>
+    </nav>
+    <div class="blogList">
+        <ul>
+            @foreach (var blogInfo in Model)
+            {
+                <li><a target="_blank" href="/Home/Blog/@blogInfo.Id">@blogInfo.Title</a></li>
+            }
+        </ul>
+    </div>
+</div>

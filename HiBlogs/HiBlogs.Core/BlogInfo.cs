@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HiBlogs.Core
 {
-    public class BlogInfo : EntityBase
+    public class Blog : EntityBase
     {       
         /// <summary>
         /// 标题

@@ -13,10 +13,20 @@ namespace HiBlogs.EntityFramework.EntityFramework
         {
         }
 
-        //string str = @"Data Source=;Database=;User ID=;Password=;pooling=true;CharSet=utf8;port=3306;sslmode=none";
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-        //    optionsBuilder.UseMySql(str);
+        private string _connection;
+        public HiBlogsDbContext(string connection)
+        {
+            _connection = connection;
+        }
 
-        public DbSet<BlogInfo> BlogInfos { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!string.IsNullOrWhiteSpace(_connection))
+                optionsBuilder.UseMySql(_connection);
+
+        }
+
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

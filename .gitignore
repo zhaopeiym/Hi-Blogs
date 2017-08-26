@@ -20,3 +20,6 @@
 /HiBlogs/HiBlogs.Web/appsettings.json
 /HiBlogs/HiBlogs.Web/appsettings.Development.json
 /.vs
+/HiBlogs/HiBlogs.Web/wwwroot/File
+/HiBlogs/XUnitTestBlogsMigration/bin
+/HiBlogs/XUnitTestBlogsMigration/obj
