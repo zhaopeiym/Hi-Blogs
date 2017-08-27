@@ -17,4 +17,8 @@
     <ProjectReference Include="..\HiBlogs.WebApi\HiBlogs.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Resource\Home\Index.css" />
+  </ItemGroup>
+
 </Project>
