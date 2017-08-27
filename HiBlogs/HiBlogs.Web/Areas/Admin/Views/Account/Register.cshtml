@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "注册";
+}
+
+<div>
+    用户名：<input type="text" class="userName" />
+    密码：<input type="text" class="passwod" />
+
+    <button class="btn-register">注册</button>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".btn-register").click(function () {
+                $.ajax({
+                    url: "/api/Account/Register",
+                    type: "post",
+                    data: { "userName": $(".userName").val(), "passwod": $(".passwod").val() },
+                    success: function (sData) {
+                        if (sData.succeeded) {
+                            alert("注册成功");
+                            location.href = "/";
+                        }
+                        else {
+                            alert(sData.errors[0].description);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

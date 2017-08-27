@@ -21,4 +21,8 @@
     <None Include="wwwroot\Resource\Home\Index.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Views\Home\" />
+  </ItemGroup>
+
 </Project>

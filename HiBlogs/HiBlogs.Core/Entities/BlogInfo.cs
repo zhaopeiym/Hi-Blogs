@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HiBlogs.Core
+namespace HiBlogs.Core.Entities
 {
     public class Blog : EntityBase
     {       

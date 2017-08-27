@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "登录";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <span>欢迎，</span> <span>@User.Identity.Name</span>
+    <button class="btn-logoff">安全退出</button>
+}
+else
+{
+    <div>
+        用户名：<input type="text" class="userName" />
+        密码：<input type="text" class="passwod" />
+        自动登录：<input type="checkbox" class="rememberMe" checked />
+        <button class="btn-login">登录</button>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $(".btn-login").click(function () {
+            $.ajax({
+                url: "/api/Account/Login",
+                type: "post",
+                data: {
+                    "userName": $(".userName").val(),
+                    "passwod": $(".passwod").val(),
+                    "rememberMe": $(".rememberMe").prop("checked"),
+                    "returnUrl": $.queryString("ReturnUrl")
+                },
+                success: function (sData) {
+                    debugger
+                    if (sData !== "false") {
+                        location.href = sData && decodeURIComponent(sData) || "/";
+                    }
+                    else
+                        location.reload(true);
+                }
+            });
+        });
+
+        $(".btn-logoff").click(function () {
+            $.ajax({
+                url: "/api/Account/LogOff",
+                type: "post",
+                success: function (sData) {
+                    location.reload(true);
+                }
+            });
+        });
+    })
+</script>

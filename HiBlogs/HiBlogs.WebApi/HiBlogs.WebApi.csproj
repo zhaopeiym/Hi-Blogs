@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Api\Models\" />
+    <Folder Include="Api\Authorization\" />
   </ItemGroup>
 
   <ItemGroup>

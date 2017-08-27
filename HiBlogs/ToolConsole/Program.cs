@@ -1,4 +1,5 @@
 ﻿using BlogsMigration;
+using HiBlogs.Core.Entities;
 using HiBlogs.EntityFramework.EntityFramework;
 using System;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace ToolConsole
                 foreach (var blog in blogs)
                 {
                     Console.WriteLine("正在迁移" + blog.Url);
-                    db.Blogs.Add(new HiBlogs.Core.Blog()
+                    db.Blogs.Add(new Blog()
                     {
                         Content = blog.Content,
                         Title = blog.Title,

@@ -1,4 +1,5 @@
 ﻿using BlogsMigration;
+using HiBlogs.Core.Entities;
 using HiBlogs.EntityFramework.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,7 +27,7 @@ namespace HiBlogs.WebApi.Api.Controllers
             var blogs = await blogMigration.CnblogsMigrationToHiBlogAsync(userName, true);
             foreach (var blog in blogs)
             {
-                _db.Blogs.Add(new HiBlogs.Core.Blog()
+                _db.Blogs.Add(new Blog()
                 {
                     Content = blog.Content,
                     Title = blog.Title,

@@ -9,12 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HiBlogs.Web.Areas.Admin.Controllers
 {
     public class HomeController : AdminBaseController
-    {
-        [Area("Admin")]
-        // GET: /<controller>/
-        public IActionResult Migration()
-        {
-            return View();
-        }
+    {        
+      
     }
 }

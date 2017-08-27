@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestBlogsMigration", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{CB840DF8-27F4-401A-9BF3-0D3CB74B5F42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.Definitions", "HiBlogs.Definitions\HiBlogs.Definitions.csproj", "{4685F977-D32F-412C-A2EB-0FBB637BA633}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{626CA33E-7174-4FF0-8852-C1B5B42575AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{626CA33E-7174-4FF0-8852-C1B5B42575AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{626CA33E-7174-4FF0-8852-C1B5B42575AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4685F977-D32F-412C-A2EB-0FBB637BA633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4685F977-D32F-412C-A2EB-0FBB637BA633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4685F977-D32F-412C-A2EB-0FBB637BA633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4685F977-D32F-412C-A2EB-0FBB637BA633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

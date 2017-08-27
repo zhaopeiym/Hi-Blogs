@@ -20,17 +20,18 @@ namespace HiBlogs.Web.Controllers
 
         public IActionResult Index()
         {
-            var blogInfos = _db.Blogs.Select(t => new BlogInfoViewModel
-            {
-                Title = t.Title,
-                Id = t.Id
-            }).ToList();
+            var blogInfos = _db.Blogs.OrderByDescending(t => t.OldPublishTiem)
+                .Select(t => new BlogInfoViewModel
+                {
+                    Title = t.Title,
+                    Id = t.Id
+                }).ToList();
             return View(blogInfos);
         }
 
         public IActionResult Blog(int Id)
         {
-            var blog= _db.Blogs.Where(t => t.Id == Id)
+            var blog = _db.Blogs.Where(t => t.Id == Id)
                 .Select(t => new BlogViewModel
                 {
                     Title = t.Title,
