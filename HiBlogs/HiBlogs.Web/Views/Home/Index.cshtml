@@ -20,14 +20,24 @@
             <span class="mesg">ASP.NET Core2.0 + CentOS7.3 只为技术而技术！！！</span>
         </div>
         <div class="navbar-right">
-            <a target="_blank" href="//job.haojima.net">找工作（实时综合查询）</a>
-            <a target="_blank" href="//socket.haojima.net">聊天室</a>
-            <a target="_blank" href="//messageboard.haojima.net">留言板</a>
+            @*<a target="_blank" href="//job.haojima.net">找工作（实时综合查询）</a>
+                <a target="_blank" href="//socket.haojima.net">聊天室</a>
+                <a target="_blank" href="//messageboard.haojima.net">留言板</a>*@
+            @if (User.Identity.IsAuthenticated)
+            {
+                <span>@User.Identity.Name</span>
+                <button class="btn-logoff">安全退出</button>
+            }
+            else
+            {
+                <a href="/Admin/Account/Login?ReturnUrl=/">登录</a>
+            }
+            <a>写文章</a>
         </div>
         <div class="navbar-right-phone displayNone">
-            <a target="_blank" href="//job.haojima.net">找工作</a>
-            <a target="_blank" href="//socket.haojima.net">聊天室</a>
-            <a target="_blank" href="//messageboard.haojima.net">留言板</a>
+            @*<a target="_blank" href="//job.haojima.net">找工作</a>
+                <a target="_blank" href="//socket.haojima.net">聊天室</a>
+                <a target="_blank" href="//messageboard.haojima.net">留言板</a>*@
         </div>
     </nav>
     <div class="blogList">
@@ -39,3 +49,16 @@
         </ul>
     </div>
 </div>
+@section scripts{ 
+    <script type="text/javascript">
+        $(".btn-logoff").click(function () { 
+            $.ajax({
+                url: "/api/Account/LogOff",
+                type: "post",
+                success: function (sData) {
+                    location.reload(true);
+                }
+            });
+        });
+    </script>
+}

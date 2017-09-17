@@ -1,14 +1,10 @@
-﻿using HiBlogs.Core.Authorization;
-using HiBlogs.Core.Entities;
+﻿using HiBlogs.Core.Entities;
 using HiBlogs.Definitions;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HiBlogs.WebApi.Api.Controllers

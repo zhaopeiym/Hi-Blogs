@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Api\Models\" />
     <Folder Include="Api\Authorization\" />
+    <Folder Include="Api\Models\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,13 +15,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogsMigration\BlogsMigration.csproj" />
+    <ProjectReference Include="..\HiBlogs.Core\HiBlogs.Core.csproj" />
     <ProjectReference Include="..\HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj" />
     <ProjectReference Include="..\HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
-      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.viewfeatures\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    <Reference Include="Microsoft.AspNetCore.Identity">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.identity\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Identity.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -1,23 +1,157 @@
 ﻿@{
     ViewData["Title"] = "登录";
 }
+@section styles{
+    <style type="text/css">
+        html {
+            background: #F1F1F1;
+            /*font-size:16px;*/
+        }
 
-@if (User.Identity.IsAuthenticated)
-{
-    <span>欢迎，</span> <span>@User.Identity.Name</span>
-    <button class="btn-logoff">安全退出</button>
+        .login-content {
+            margin: 3% auto;
+            /*width: 400px;*/
+            display: table;
+            background: #fff;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 0 8px rgba(0,0,0,.1);
+            vertical-align: middle;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 300px;
+            height: 50px;
+            margin-bottom: 0px;
+            padding: 4px 12px 4px 35px;
+            background-color: hsla(0,0%,71%,.1);
+            vertical-align: middle;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .userName {
+            border: 1px solid #c8c8c8;
+            border-radius: 4px 4px 0 0;
+            border-bottom: 0px;
+        }
+
+        .passwod {
+            border: 1px solid #c8c8c8;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .sign {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+            .sign input {
+                width: 20px;
+                height: 20px;
+                vertical-align: sub;
+                margin-left: 5px;
+            }
+
+        .btn-login {
+            width: 100%;
+            padding: 9px 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            background: #42c02e;
+            cursor: pointer;
+            outline: none;
+            display: block;
+            clear: both;
+        }
+
+        .third-party-login {
+            text-align: center;
+        }
+
+            .third-party-login div.mesg {
+                color: #b5b5b5;
+                font-size: 12px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+
+            .third-party-login a {                
+                display: inline-block;
+                text-decoration: none;
+            }
+
+        .logo {
+            margin-top: 50px;
+            margin-left: 50px;
+        }
+
+            .logo img{
+                margin-right: 5px;              
+            }
+
+            .logo span {
+                color: #434343;
+                font-size: 28px;
+                font-weight: 900;
+                vertical-align: top;
+            }
+
+        .btn-login-register {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+            .btn-login-register a {
+                display: inline-block;
+                padding: 30px;
+                color: #b5b5b5;
+                font-weight: 800;
+                font-size: 20px;
+                text-decoration: none;
+            }
+    </style>
 }
-else
-{
+<div class="logo">
+    <img src="~/images/hi_48.png" />
+    <span>嗨-博客</span>
+</div>
+<div class="login-content">
+    <div class="btn-login-register">
+        <a style="color:#EA6F5A" href="/Admin/Account/Login?ReturnUrl=/">登录</a>
+        <a href="/Admin/Account/Register">注册</a>
+    </div>
     <div>
-        用户名：<input type="text" class="userName" />
-        密码：<input type="text" class="passwod" />
-        自动登录：<input type="checkbox" class="rememberMe" checked />
+        <input type="text" class="userName" placeholder="用户名或邮箱" />
+    </div>
+    <div>
+        <input type="password" class="passwod" placeholder="密码" />
+    </div>
+    <div class="sign">
+        <input type="checkbox" class="rememberMe" checked />
+        <span>记住我</span>
+    </div>
+    <div>
         <button class="btn-login">登录</button>
     </div>
-}
+    <div class="third-party-login">
+        <div class="mesg">直接社交帐号登录</div>
+        <div>
+            <a href="https://graph.qq.com/oauth/show?which=Login&display=pc&client_id=101269561&redirect_uri=http://haojima.net/hi_login.html&response_type=code&display=default%20&state=qq">
+                <img src="/images/qq.png" />
+            </a>
+            <a href="javascript:alert('暂未实现')">
+                <img src="/images/xinlang.png" />
+            </a>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(function () {
+        //登录
         $(".btn-login").click(function () {
             $.ajax({
                 url: "/api/Account/Login",
@@ -35,16 +169,6 @@ else
                     }
                     else
                         location.reload(true);
-                }
-            });
-        });
-
-        $(".btn-logoff").click(function () {
-            $.ajax({
-                url: "/api/Account/LogOff",
-                type: "post",
-                success: function (sData) {
-                    location.reload(true);
                 }
             });
         });

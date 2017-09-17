@@ -4,7 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <style type="text/css">
+        * {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+            /*font-size: 18px;*/
+        }
 
+        .clearfix:before, .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+            overflow: hidden;
+        }
+
+        .clearfix {
+            zoom: 1; /* for ie6 & ie7 */
+        }
+
+        .red {
+            color: red;
+        }
+
+        .displayNone {
+            display: none;
+        }      
+    </style>
+    @RenderSection("styles", required: false)
 </head>
 <body>
     <script src="~/lib/jquery/dist/jquery.js"></script>

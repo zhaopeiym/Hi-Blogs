@@ -2,9 +2,6 @@
 using HiBlogs.Core.Entities;
 using HiBlogs.EntityFramework.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HiBlogs.WebApi.Api.Controllers
