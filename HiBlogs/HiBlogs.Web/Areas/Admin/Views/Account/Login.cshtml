@@ -78,7 +78,7 @@
                 margin-bottom: 10px;
             }
 
-            .third-party-login a {                
+            .third-party-login a {
                 display: inline-block;
                 text-decoration: none;
             }
@@ -88,8 +88,8 @@
             margin-left: 50px;
         }
 
-            .logo img{
-                margin-right: 5px;              
+            .logo img {
+                margin-right: 5px;
             }
 
             .logo span {
@@ -139,7 +139,7 @@
     <div class="third-party-login">
         <div class="mesg">直接社交帐号登录</div>
         <div>
-            <a href="https://graph.qq.com/oauth/show?which=Login&display=pc&client_id=101269561&redirect_uri=http://haojima.net/hi_login.html&response_type=code&display=default%20&state=qq">
+            <a class="tencentQQLogin" href="javascript:;" >
                 <img src="/images/qq.png" />
             </a>
             <a href="javascript:alert('暂未实现')">
@@ -150,6 +150,7 @@
 </div>
 
 <script type="text/javascript">
+
     $(function () {
         //登录
         $(".btn-login").click(function () {
@@ -172,5 +173,16 @@
                 }
             });
         });
-    })
+        //QQ登录
+        $(".tencentQQLogin").click(function () { 
+            $.ajax({
+                url: "/api/Account/GetAuthorizeUrl",
+                success: function (authorizeUrl) {
+                    location.href = authorizeUrl;
+                }
+            });
+        });
+
+
+    })   
 </script>

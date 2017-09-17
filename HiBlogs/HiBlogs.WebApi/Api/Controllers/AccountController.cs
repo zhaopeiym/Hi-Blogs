@@ -2,6 +2,7 @@
 using HiBlogs.Definitions;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Infrastructure;
+using HiBlogs.Infrastructure.OAuthClient;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -65,6 +66,19 @@ namespace HiBlogs.WebApi.Api.Controllers
                 await _userManager.CreateAsync(user, "123qwe");
                 await _userManager.AddToRoleAsync(user, RoleNames.Administrator);
             }
+        }
+
+        /// <summary>
+        /// 获取社交帐号认证地址
+        /// </summary>
+        /// <returns></returns>
+        public string GetAuthorizeUrl()
+        {
+            var clientId = ConfigurationManager.GetSection("TencentQQClient:ClientId");
+            var clientSecret = ConfigurationManager.GetSection("TencentQQClient:ClientSecret");
+            var callbackUrl = ConfigurationManager.GetSection("TencentQQClient:CallbackUrl");
+            TencentQQClient tencentQQClient = new TencentQQClient(clientId, clientSecret, callbackUrl);
+            return tencentQQClient.GetAuthorizeUrl();
         }
 
         /// <summary>

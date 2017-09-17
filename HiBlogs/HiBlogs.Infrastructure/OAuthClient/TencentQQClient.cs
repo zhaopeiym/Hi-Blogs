@@ -16,5 +16,11 @@ namespace HiBlogs.Infrastructure.OAuthClient
             ClientSecret = clientSecret;
             CallbackUrl = callbackUrl;
         }
+
+        public string GetAuthorizeUrl()
+        {
+            return @"https://graph.qq.com/oauth/show?which=Login&display=pc&client_id="+ ClientId + 
+                 "&redirect_uri="+ CallbackUrl + "&response_type=code&display=default%20&state=qq";
+        }
     }
 }
