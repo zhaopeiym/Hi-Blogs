@@ -2,7 +2,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>Hi-Blogs QQConnect JSDK - redirectURI </title>    
+    <title>Hi-Blogs OAuth认证</title>    
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <style type="text/css">
         html, body {
@@ -20,19 +20,21 @@
 
 </body>
 </html>
-
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/js/jquery.common.js"></script>
 <script type="text/javascript">
     $(function () {
-        //$.post("/UserManage/ThirdLoginCallback", { code: $.getUrlVar("code"), loginType: $.getUrlVar("state") }, function (obj) {
-        //    try {
-        //        if (window.opener.location.href.indexOf("haojima.net/UserManage/Login") >= 0)
-        //            window.opener.location.href = "/";
-        //        else
-        //            window.opener.location.reload(true);//强制刷新
-        //    } catch (e) {
-        //        alert("自动刷新或跳转失败~");
-        //    }
-        //    window.close();
-        //});
+        $.post("/api/Account/GetOAuthUser", { "code": $.queryString("code"), "type": $.queryString("state") }, function (obj) {
+            debugger
+            try {
+                if (window.opener.location.href.indexOf("haojima.net/Admin/Account/Login") >= 0)
+                    window.opener.location.href = "/";
+                else
+                    window.opener.location.reload(true);//强制刷新
+            } catch (e) {
+                alert("自动刷新或跳转失败~");
+            }
+            window.close();
+        });
     });
 </script>

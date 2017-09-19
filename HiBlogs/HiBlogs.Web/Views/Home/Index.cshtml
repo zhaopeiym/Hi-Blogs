@@ -35,9 +35,9 @@
             <a>写文章</a>
         </div>
         <div class="navbar-right-phone displayNone">
-            @*<a target="_blank" href="//job.haojima.net">找工作</a>
-                <a target="_blank" href="//socket.haojima.net">聊天室</a>
-                <a target="_blank" href="//messageboard.haojima.net">留言板</a>*@
+            <a target="_blank" href="//job.haojima.net">找工作</a>
+            <a target="_blank" href="//socket.haojima.net">聊天室</a>
+            <a target="_blank" href="//messageboard.haojima.net">留言板</a>
         </div>
     </nav>
     <div class="blogList">
@@ -49,9 +49,9 @@
         </ul>
     </div>
 </div>
-@section scripts{ 
+@section scripts{
     <script type="text/javascript">
-        $(".btn-logoff").click(function () { 
+        $(".btn-logoff").click(function () {
             $.ajax({
                 url: "/api/Account/LogOff",
                 type: "post",

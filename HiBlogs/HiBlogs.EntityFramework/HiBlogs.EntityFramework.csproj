@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20170827075427_db1.cs" />
+    <Compile Remove="Migrations\20170827075427_db1.Designer.cs" />
+    <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot--.cs" />
     <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot-dev.cs" />
     <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot-r.cs" />
   </ItemGroup>

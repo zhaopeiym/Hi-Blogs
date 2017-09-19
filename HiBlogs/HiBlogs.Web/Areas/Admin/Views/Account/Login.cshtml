@@ -139,10 +139,10 @@
     <div class="third-party-login">
         <div class="mesg">直接社交帐号登录</div>
         <div>
-            <a class="tencentQQLogin" href="javascript:;" >
+            <a class="tencentQQLogin" href="javascript:;">
                 <img src="/images/qq.png" />
             </a>
-            <a href="javascript:alert('暂未实现')">
+            <a class="sianLogin" href="javascript:;">
                 <img src="/images/xinlang.png" />
             </a>
         </div>
@@ -174,15 +174,23 @@
             });
         });
         //QQ登录
-        $(".tencentQQLogin").click(function () { 
+        $(".tencentQQLogin").click(function () {
             $.ajax({
-                url: "/api/Account/GetAuthorizeUrl",
+                url: "/api/Account/GetOAuthQQUrl",
                 success: function (authorizeUrl) {
-                    location.href = authorizeUrl;
+                    window.open(authorizeUrl);
                 }
             });
         });
 
-
-    })   
+        //新浪登录
+        $(".sianLogin").click(function () {
+            $.ajax({
+                url: "/api/Account/GetOAuthSinaUrl",
+                success: function (authorizeUrl) {
+                    window.open(authorizeUrl);
+                }
+            });
+        });
+    })
 </script>

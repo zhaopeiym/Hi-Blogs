@@ -111,15 +111,11 @@ namespace HiBlogs.EntityFramework.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("Nickname");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("OpenId");
 
                     b.Property<string>("PasswordHash");
 
