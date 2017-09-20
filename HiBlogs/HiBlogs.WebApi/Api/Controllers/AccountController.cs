@@ -1,4 +1,5 @@
-﻿using HiBlogs.Core.Entities;
+﻿using HiBlogs.Application.Admin;
+using HiBlogs.Core.Entities;
 using HiBlogs.Definitions;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Infrastructure;
@@ -20,6 +21,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         private readonly HiBlogsDbContext _dbContext;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
+        private readonly AccountAppService accountAppService;
 
         public AccountController(SignInManager<User> signInManager,
             HiBlogsDbContext hiBlogsDbContext,
@@ -30,6 +32,7 @@ namespace HiBlogs.WebApi.Api.Controllers
             _userManager = userManager;
             _dbContext = hiBlogsDbContext;
             _roleManager = roleManager;
+            accountAppService = new AccountAppService();
         }
 
         /// <summary>
@@ -70,34 +73,13 @@ namespace HiBlogs.WebApi.Api.Controllers
             }
         }
 
-        private IOAuthClient GetOAuthClient(AuthType authType)
-        {
-            string clientId = string.Empty;
-            string clientSecret = string.Empty;
-            string callbackUrl = string.Empty;
-
-            if (authType == AuthType.QQ)
-            {
-                clientId = ConfigurationManager.GetSection("OAuthClient:TencentQQClient:ClientId");
-                clientSecret = ConfigurationManager.GetSection("OAuthClient:TencentQQClient:ClientSecret");
-                callbackUrl = ConfigurationManager.GetSection("OAuthClient:TencentQQClient:CallbackUrl");
-            }
-            else if (authType == AuthType.Sina)
-            {
-                clientId = ConfigurationManager.GetSection("OAuthClient:SinaClient:ClientId");
-                clientSecret = ConfigurationManager.GetSection("OAuthClient:SinaClient:ClientSecret");
-                callbackUrl = ConfigurationManager.GetSection("OAuthClient:SinaClient:CallbackUrl");
-            }
-            return OAuthClientFactory.GetOAuthClient(clientId, clientSecret, callbackUrl, authType);
-        }
-
         /// <summary>
         /// 获取社交帐号认证地址[QQ]
         /// </summary>
         /// <returns></returns>
         public string GetOAuthQQUrl()
         {
-            return GetOAuthClient(AuthType.QQ).GetAuthUrl();
+            return accountAppService.GetOAuthClient(AuthType.QQ).GetAuthUrl();
         }
         /// <summary>
         /// 获取社交帐号认证地址[新浪]
@@ -105,7 +87,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <returns></returns>
         public string GetOAuthSinaUrl()
         {
-            return GetOAuthClient(AuthType.Sina).GetAuthUrl();
+            return accountAppService.GetOAuthClient(AuthType.Sina).GetAuthUrl();
         }
 
         /// <summary>
@@ -125,7 +107,7 @@ namespace HiBlogs.WebApi.Api.Controllers
                     authType = AuthType.Sina;
                     break;
             }
-            var client = GetOAuthClient(authType);
+            var client = accountAppService.GetOAuthClient(authType);
             var accessToken = await client.GetAccessToken(code);
 
             var user = await _dbContext.Users.Where(t => t.OpenId == accessToken.UserId).FirstOrDefaultAsync();

@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Talk.OAuthClient" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj" />
+    <ProjectReference Include="..\HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

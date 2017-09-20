@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogsMigration\BlogsMigration.csproj" />
+    <ProjectReference Include="..\HiBlogs.Application\HiBlogs.Application.csproj" />
     <ProjectReference Include="..\HiBlogs.Core\HiBlogs.Core.csproj" />
     <ProjectReference Include="..\HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj" />
     <ProjectReference Include="..\HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj" />

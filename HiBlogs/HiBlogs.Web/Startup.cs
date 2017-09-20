@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using HiBlogs.Definitions;
+using System.Reflection;
+using HiBlogs.Definitions.Dependency;
 
 namespace HiBlogs.Web
 {
@@ -22,7 +24,7 @@ namespace HiBlogs.Web
         /// <summary>
         /// 连接字符串
         /// </summary>
-        public static string connection;       
+        public static string connection;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,6 +35,35 @@ namespace HiBlogs.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region 自动注入
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            var singletonDependency = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
+                    .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ISingletonDependency")))
+                    .ToList();
+
+            var transientDependency = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
+                   .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ITransientDependency")))
+                   .ToList();
+
+            //自动注入标记了 ISingletonDependency接口的 接口
+            foreach (var interfaceName in singletonDependency)
+            {
+                var obj = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                if (obj != null)
+                    services.AddSingleton(interfaceName, obj);
+            }
+
+            //自动注入标记了 ITransientDependency接口的 接口
+            foreach (var interfaceName in transientDependency)
+            {
+                var obj = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                if (obj != null)
+                    services.AddTransient(interfaceName, obj);
+            }
+
+            #endregion
+
             services.AddIdentity<User, Role>(options =>
             {
                 options.Password = new PasswordOptions()

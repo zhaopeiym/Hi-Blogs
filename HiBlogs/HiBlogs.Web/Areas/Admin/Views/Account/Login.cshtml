@@ -87,7 +87,9 @@
             margin-top: 50px;
             margin-left: 50px;
         }
-
+            .logo a {
+                text-decoration: none;
+            }
             .logo img {
                 margin-right: 5px;
             }
@@ -115,12 +117,14 @@
     </style>
 }
 <div class="logo">
-    <img src="~/images/hi_48.png" />
-    <span>嗨-博客</span>
+    <a href="/">
+        <img src="/images/hi_48.png" />
+        <span>嗨-博客</span>
+    </a>
 </div>
 <div class="login-content">
     <div class="btn-login-register">
-        <a style="color:#EA6F5A" href="/Admin/Account/Login?ReturnUrl=/">登录</a>
+        <a style="color:#EA6F5A" href="javascript:;">登录</a>
         <a href="/Admin/Account/Register">注册</a>
     </div>
     <div>
@@ -139,10 +143,10 @@
     <div class="third-party-login">
         <div class="mesg">直接社交帐号登录</div>
         <div>
-            <a class="tencentQQLogin" href="javascript:;">
+            <a class="tencentQQLogin" target="_blank" href="/Admin/Account/GetOAuthQQUrl">
                 <img src="/images/qq.png" />
             </a>
-            <a class="sianLogin" href="javascript:;">
+            <a class="sianLogin" target="_blank" href="/Admin/Account/GetOAuthSinaUrl">
                 <img src="/images/xinlang.png" />
             </a>
         </div>
@@ -172,25 +176,6 @@
                         location.reload(true);
                 }
             });
-        });
-        //QQ登录
-        $(".tencentQQLogin").click(function () {
-            $.ajax({
-                url: "/api/Account/GetOAuthQQUrl",
-                success: function (authorizeUrl) {
-                    window.open(authorizeUrl);
-                }
-            });
-        });
-
-        //新浪登录
-        $(".sianLogin").click(function () {
-            $.ajax({
-                url: "/api/Account/GetOAuthSinaUrl",
-                success: function (authorizeUrl) {
-                    window.open(authorizeUrl);
-                }
-            });
-        });
+        });       
     })
 </script>

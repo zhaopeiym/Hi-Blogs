@@ -28,14 +28,14 @@
             vertical-align: middle;
             outline: none;
             font-size: 16px;
-        }
+        } 
 
-        .userName {
+        .mail {
             border: 1px solid #c8c8c8;
             border-radius: 4px 4px 0 0;
         }
-
-        .mail {
+        .userName {
+        
             border: 1px solid #c8c8c8;
             border-top: 0px;
             border-bottom: 0px;
@@ -77,6 +77,11 @@
             text-align: center;
         }
 
+            .third-party-login a {
+                display: inline-block;
+                text-decoration: none;
+            }
+
             .third-party-login div.mesg {
                 color: #b5b5b5;
                 font-size: 12px;
@@ -88,6 +93,10 @@
             margin-top: 50px;
             margin-left: 50px;
         }
+
+            .logo a {
+                text-decoration: none;
+            }
 
             .logo img {
                 margin-right: 5px;
@@ -117,19 +126,21 @@
 }
 
 <div class="logo">
-    <img src="~/images/hi_48.png" />
-    <span>嗨-博客</span>
+    <a href="/">
+        <img src="/images/hi_48.png" />
+        <span>嗨-博客</span>
+    </a>
 </div>
 <div class="login-content">
     <div class="btn-login-register">
         <a href="/Admin/Account/Login?ReturnUrl=/">登录</a>
-        <a style="color:#EA6F5A" href="/Admin/Account/Register">注册</a>
-    </div>
-    <div>
-        <input type="text" class="userName" placeholder="用户名" />
+        <a style="color:#EA6F5A" href="javascript:;">注册</a>
     </div>
     <div>
         <input type="text" class="mail" placeholder="邮箱" />
+    </div>
+    <div>
+        <input type="text" class="userName" placeholder="用户名" />
     </div>
     <div>
         <input type="password" class="passwod" placeholder="密码" />
@@ -140,8 +151,12 @@
     <div class="third-party-login">
         <div class="mesg">直接社交帐号登录</div>
         <div>
-            <img src="/images/qq.png" />
-            <img src="/images/xinlang.png" />
+            <a class="tencentQQLogin" target="_blank" href="/Admin/Account/GetOAuthQQUrl">
+                <img src="/images/qq.png" />
+            </a>
+            <a class="sianLogin" target="_blank" href="/Admin/Account/GetOAuthSinaUrl">
+                <img src="/images/xinlang.png" />
+            </a>
         </div>
     </div>
 </div>
@@ -153,7 +168,7 @@
                 $.ajax({
                     url: "/api/Account/Register",
                     type: "post",
-                    data: { "userName": $(".userName").val(), "passwod": $(".passwod").val() },
+                    data: { "userName": $(".userName").val(), "passwod": $(".passwod").val(), "email": $(".mail").val() },
                     success: function (sData) {
                         if (sData.succeeded) {
                             alert("注册成功");
