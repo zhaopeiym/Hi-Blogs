@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace HiBlogs.EntityFramework.Migrations
 {
-    public partial class db1 : Migration
+    public partial class 初始化数据库 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,28 +52,28 @@ namespace HiBlogs.EntityFramework.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-            //migrationBuilder.CreateTable(
-            //    name: "Blogs",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-            //        Content = table.Column<string>(type: "longtext", nullable: true),
-            //        CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-            //        CreatorUserId = table.Column<int>(type: "int", nullable: true),
-            //        DeleterUserId = table.Column<int>(type: "int", nullable: true),
-            //        DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-            //        IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-            //        LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-            //        LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-            //        OldPublishTiem = table.Column<string>(type: "longtext", nullable: true),
-            //        Title = table.Column<string>(type: "longtext", nullable: true),
-            //        Url = table.Column<string>(type: "longtext", nullable: true)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Blogs", x => x.Id);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Blogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<string>(type: "longtext", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorUserId = table.Column<int>(type: "int", nullable: true),
+                    DeleterUserId = table.Column<int>(type: "int", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    OldPublishTiem = table.Column<string>(type: "longtext", nullable: true),
+                    Title = table.Column<string>(type: "longtext", nullable: true),
+                    Url = table.Column<string>(type: "longtext", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blogs", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",

@@ -160,9 +160,9 @@ namespace HiBlogs.WebApi.Api.Controllers
             }
             EmailHelper emailHelper = new EmailHelper()
             {
-                mailPwd = EmailValue.emailPasswod,
-                host = EmailValue.emailHost,
-                mailFrom = EmailValue.emailFrom,
+                mailPwd = EmailConfig.Passwod,
+                host = EmailConfig.Host,
+                mailFrom = EmailConfig.From,
                 mailSubject = "欢迎您注册 嗨-博客",
                 mailBody = EmailHelper.tempBody(userName, " 您的激活码：" + "123"),
                 mailToArray = new string[] { email }

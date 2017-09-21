@@ -143,15 +143,14 @@ namespace HiBlogs.Infrastructure
         }
          
         #endregion
-
-        public delegate void Call(MailMessage mailMes);
+      
         /// <summary>
         /// 邮件发送
         /// </summary>
         /// <param name="CallSuccess">发送成功回调</param>
         /// <param name="CallFailure">发送失败回调</param>
         /// <returns></returns>
-        public bool Send(Call CallSuccess = null, Call CallFailure = null)
+        public bool Send(Action<MailMessage> CallSuccess = null, Action<MailMessage> CallFailure = null)
         {
             //使用指定的邮件地址初始化MailAddress实例
             MailAddress maddr = new MailAddress(mailFrom, nickname);

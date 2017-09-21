@@ -12,8 +12,8 @@ using System;
 namespace HiBlogs.EntityFramework.Migrations
 {
     [DbContext(typeof(HiBlogsDbContext))]
-    [Migration("20170919140446_db1")]
-    partial class db1
+    [Migration("20170921090246_初始化数据库")]
+    partial class 初始化数据库
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

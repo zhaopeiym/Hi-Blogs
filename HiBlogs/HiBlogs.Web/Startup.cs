@@ -16,6 +16,9 @@ using Microsoft.AspNetCore.Http;
 using HiBlogs.Definitions;
 using System.Reflection;
 using HiBlogs.Definitions.Dependency;
+using Serilog;
+using Serilog.Events;
+using Microsoft.Extensions.Logging;
 
 namespace HiBlogs.Web
 {
@@ -35,7 +38,72 @@ namespace HiBlogs.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region 自动注入
+            // 自动注入
+            AutoInjection(services);
+            // 日志配置
+            LogConfig();
+            //Identity
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password = new PasswordOptions()
+                {
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false
+                };
+
+            }).AddEntityFrameworkStores<HiBlogsDbContext>().AddDefaultTokenProviders();
+            //修改默认登录、和退出链接
+            //https://github.com/aspnet/Security/issues/1310            
+            services.ConfigureApplicationCookie(identityOptionsCookies =>
+            {
+                identityOptionsCookies.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                identityOptionsCookies.LoginPath = "/Admin/Account/Login";
+                //identityOptionsCookies.LogoutPath = "...";
+            });
+            //Mvc
+            services.AddMvc();
+            //数据库连接
+            services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(SqlConnection.MySqlConnection));
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            //注册Serilog日志框架
+            loggerFactory.AddSerilog();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStaticFiles();
+            app.UseAuthentication();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                   name: "areaRoute",
+                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+
+        #region 自定义设置
+
+        /// <summary>
+        /// 自动注入
+        /// </summary>
+        private void AutoInjection(IServiceCollection services)
+        {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             var singletonDependency = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
@@ -61,68 +129,37 @@ namespace HiBlogs.Web
                 if (obj != null)
                     services.AddTransient(interfaceName, obj);
             }
-
-            #endregion
-
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.Password = new PasswordOptions()
-                {
-                    RequireNonAlphanumeric = false,
-                    RequireUppercase = false
-                };
-
-            }).AddEntityFrameworkStores<HiBlogsDbContext>().AddDefaultTokenProviders();
-
-            //修改默认登录、和退出链接
-            //https://github.com/aspnet/Security/issues/1310            
-            services.ConfigureApplicationCookie(identityOptionsCookies =>
-            {
-                identityOptionsCookies.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                identityOptionsCookies.LoginPath = "/Admin/Account/Login";
-                //identityOptionsCookies.LogoutPath = "...";
-            });
-
-            services.AddMvc();
-
-            //注意：一定要加 sslmode=none 
-            connection = Configuration.GetConnectionString("MySqlConnection");
-            EmailValue.emailFrom = Configuration.GetValue<string>("emailFrom");
-            EmailValue.emailPasswod = Configuration.GetValue<string>("emailPasswod");
-            EmailValue.emailHost = Configuration.GetValue<string>("emailHost");
-            services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(connection));
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        /// <summary>
+        /// 日志配置
+        /// </summary>      
+        private void LogConfig()
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-            app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                   name: "areaRoute",
-                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            //InitDBData();
+            Log.Logger = new LoggerConfiguration()
+                                 .Enrich.FromLogContext()
+                                 .MinimumLevel.Debug()
+                                 .MinimumLevel.Override("System", LogEventLevel.Information)
+                                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Debug).WriteTo.Async(
+                                     a => a.RollingFile("logs/log-{Date}-Debug.txt")
+                                 ))
+                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Information).WriteTo.Async(
+                                     a => a.RollingFile("logs/log-{Date}-Information.txt")
+                                 ))
+                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Warning).WriteTo.Async(
+                                     a => a.RollingFile("logs/log-{Date}-Warning.txt")
+                                 ))
+                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Error).WriteTo.Async(
+                                     a => a.RollingFile("logs/log-{Date}-Error.txt")
+                                 ))
+                                 .WriteTo.Logger(lg => lg.Filter.ByIncludingOnly(p => p.Level == LogEventLevel.Fatal).WriteTo.Async(
+                                     a => a.RollingFile("logs/log-{Date}-Fatal.txt")
+                                 ))
+                                 .CreateLogger();
         }
+
+        #endregion
 
         #region 初始化数据库数据
         /// <summary>
@@ -130,7 +167,7 @@ namespace HiBlogs.Web
         /// </summary>
         public void InitDBData()
         {
-            using (HiBlogsDbContext _dbContext = new HiBlogsDbContext(connection))
+            using (HiBlogsDbContext _dbContext = new HiBlogsDbContext(SqlConnection.MySqlConnection))
             {
                 if (!_dbContext.Roles.Any())
                 {

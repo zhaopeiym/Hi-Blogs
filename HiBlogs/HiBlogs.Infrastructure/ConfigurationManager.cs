@@ -10,7 +10,7 @@ namespace HiBlogs.Infrastructure
 {
     public class ConfigurationManager
     {
-        static IConfiguration Configuration;
+        public readonly static IConfiguration Configuration;
 
         static ConfigurationManager()
         {
