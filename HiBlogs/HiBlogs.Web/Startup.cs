@@ -19,6 +19,8 @@ using HiBlogs.Definitions.Dependency;
 using Serilog;
 using Serilog.Events;
 using Microsoft.Extensions.Logging;
+using HiBlogs.Definitions.Config;
+using HiBlogs.Application;
 
 namespace HiBlogs.Web
 {
@@ -38,10 +40,18 @@ namespace HiBlogs.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var assemblyWeb = Assembly.GetExecutingAssembly();
+            var assemblyApplication = ApplicationModule.GetAssembly();
+
             // 自动注入
-            AutoInjection(services);
+            AutoInjection(services, assemblyApplication);
+            AutoInjection(services, assemblyWeb);
             // 日志配置
             LogConfig();
+            //redis  http://www.cnblogs.com/savorboard/p/5592948.html
+            services.AddDistributedRedisCache(o => o.Configuration = AppConfig.RedisConnection);
+            //session （session存放在redis）
+            services.AddSession();
             //Identity
             services.AddIdentity<User, Role>(options =>
             {
@@ -63,7 +73,7 @@ namespace HiBlogs.Web
             //Mvc
             services.AddMvc();
             //数据库连接
-            services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(SqlConnection.MySqlConnection));
+            services.AddDbContext<HiBlogsDbContext>(options => options.UseMySql(AppConfig.MySqlConnection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,17 +94,8 @@ namespace HiBlogs.Web
 
             app.UseStaticFiles();
             app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                   name: "areaRoute",
-                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseSession();
+            RouteConfig(app);
         }
 
         #region 自定义设置
@@ -102,32 +103,52 @@ namespace HiBlogs.Web
         /// <summary>
         /// 自动注入
         /// </summary>
-        private void AutoInjection(IServiceCollection services)
+        private void AutoInjection(IServiceCollection services, Assembly assembly)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
-            var singletonDependency = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
+            //获取标记了ISingletonDependency接口的接口
+            var singletonInterfaceDependency = assembly.GetTypes()
+                    .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
                     .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ISingletonDependency")))
                     .ToList();
+            //获取标记了ISingletonDependency接口的类
+            var singletonTypeDependency = assembly.GetTypes()
+                    .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
+                    .ToList();
 
-            var transientDependency = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
+            //获取标记了ITransientDependency接口的接口
+            var transientInterfaceDependency = assembly.GetTypes()
+                   .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
                    .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ITransientDependency")))
                    .ToList();
-
+            //获取标记了ITransientDependency接口的类
+            var transientTypeDependency = assembly.GetTypes()
+                    .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
+                    .ToList();
+            
             //自动注入标记了 ISingletonDependency接口的 接口
-            foreach (var interfaceName in singletonDependency)
+            foreach (var interfaceName in singletonInterfaceDependency)
             {
-                var obj = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
-                if (obj != null)
-                    services.AddSingleton(interfaceName, obj);
+                var type = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                if (type != null)
+                    services.AddSingleton(interfaceName, type);
+            }
+            //自动注入标记了 ISingletonDependency接口的 类
+            foreach (var type in singletonTypeDependency)
+            {             
+                services.AddSingleton(type, type);
             }
 
             //自动注入标记了 ITransientDependency接口的 接口
-            foreach (var interfaceName in transientDependency)
+            foreach (var interfaceName in transientInterfaceDependency)
             {
-                var obj = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
-                if (obj != null)
-                    services.AddTransient(interfaceName, obj);
+                var type = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                if (type != null)
+                    services.AddTransient(interfaceName, type);
+            }
+            //自动注入标记了 ITransientDependency接口的 类
+            foreach (var type in transientTypeDependency)
+            {
+                services.AddTransient(type, type);
             }
         }
 
@@ -136,6 +157,10 @@ namespace HiBlogs.Web
         /// </summary>      
         private void LogConfig()
         {
+            //nuget导入
+            //Serilog.Extensions.Logging
+            //Serilog.Sinks.RollingFile
+            //Serilog.Sinks.Async
             Log.Logger = new LoggerConfiguration()
                                  .Enrich.FromLogContext()
                                  .MinimumLevel.Debug()
@@ -159,6 +184,24 @@ namespace HiBlogs.Web
                                  .CreateLogger();
         }
 
+        private void RouteConfig(IApplicationBuilder app)
+        {
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                   name: "areaRoute",
+                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                  name: "userBlog",
+                  template: "{userName}/{blogId}.html/{controller=UserBlog}/{action=Blog}");
+            });
+        }
+
         #endregion
 
         #region 初始化数据库数据
@@ -167,7 +210,7 @@ namespace HiBlogs.Web
         /// </summary>
         public void InitDBData()
         {
-            using (HiBlogsDbContext _dbContext = new HiBlogsDbContext(SqlConnection.MySqlConnection))
+            using (HiBlogsDbContext _dbContext = new HiBlogsDbContext(AppConfig.MySqlConnection))
             {
                 if (!_dbContext.Roles.Any())
                 {

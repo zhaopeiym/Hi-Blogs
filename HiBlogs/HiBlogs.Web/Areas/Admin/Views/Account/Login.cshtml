@@ -87,9 +87,11 @@
             margin-top: 50px;
             margin-left: 50px;
         }
+
             .logo a {
                 text-decoration: none;
             }
+
             .logo img {
                 margin-right: 5px;
             }
@@ -152,30 +154,32 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script type="text/javascript">
 
-<script type="text/javascript">
-
-    $(function () {
-        //登录
-        $(".btn-login").click(function () {
-            $.ajax({
-                url: "/api/Account/Login",
-                type: "post",
-                data: {
-                    "userName": $(".userName").val(),
-                    "passwod": $(".passwod").val(),
-                    "rememberMe": $(".rememberMe").prop("checked"),
-                    "returnUrl": $.queryString("ReturnUrl")
-                },
-                success: function (sData) {
-                    debugger
-                    if (sData !== "false") {
-                        location.href = sData && decodeURIComponent(sData) || "/";
+        $(function () {
+            //登录
+            $(".btn-login").click(function () {
+                $.ajax({
+                    url: "/api/Account/Login",
+                    type: "post",
+                    data: {
+                        "userName": $(".userName").val(),
+                        "passwod": $(".passwod").val(),
+                        "rememberMe": $(".rememberMe").prop("checked"),
+                        "returnUrl": $.queryString("ReturnUrl")
+                    },
+                    success: function (sData) {
+                        debugger
+                        if (sData !== "false") {
+                            location.href = sData && decodeURIComponent(sData) || "/";
+                        }
+                        else
+                            location.reload(true);
                     }
-                    else
-                        location.reload(true);
-                }
+                });
             });
-        });       
-    })
-</script>
+        })
+    </script>
+
+}

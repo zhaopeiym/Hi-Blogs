@@ -50,5 +50,14 @@ namespace HiBlogs.Web.Areas.Admin.Controllers
             var url = accountAppService.GetOAuthClient(AuthType.Sina).GetAuthUrl();
             return Redirect(url);
         }
+
+        /// <summary>
+        /// 激活账号
+        /// </summary>
+        [HttpGet]
+        public IActionResult Activation(string desstring)
+        {
+            return View();
+        }
     }
 }

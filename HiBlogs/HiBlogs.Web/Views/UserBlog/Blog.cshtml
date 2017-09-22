@@ -1,0 +1,13 @@
+﻿@model BlogViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+<link href="~/Resource/Home/Blog.css" rel="stylesheet" />
+<div class="blogTopics">
+    <h1 class="postTitle">@Model.Title</h1>
+    <div class="content">@Html.Raw(Model.Content)</div>
+</div>
+<div>
+    <textarea></textarea>
+    <button type="button">提交评论</button>
+</div>

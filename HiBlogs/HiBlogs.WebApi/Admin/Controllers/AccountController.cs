@@ -1,14 +1,22 @@
-﻿using HiBlogs.Application.Admin;
+﻿using Hiblogs.Redis;
+using HiBlogs.Application.Admin;
 using HiBlogs.Core.Entities;
 using HiBlogs.Definitions;
+using HiBlogs.Definitions.Config;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Infrastructure;
+using HiBlogs.Infrastructure.Models;
+using HiBlogs.WebApi.Api.Controllers.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Web;
 using Talk.OAuthClient;
 
 namespace HiBlogs.WebApi.Api.Controllers
@@ -68,8 +76,8 @@ namespace HiBlogs.WebApi.Api.Controllers
                 await _roleManager.CreateAsync(roleAdmin);
                 await _roleManager.CreateAsync(roleAverage);
                 var user = new User { UserName = "Administrator", Email = "Administrator@haojima.net" };
-                await _userManager.CreateAsync(user, "123qwe");
-                await _userManager.AddToRoleAsync(user, RoleNames.Administrator);
+                var createUserResult = await _userManager.CreateAsync(user, "123qwe");
+                var addRoleResult = await _userManager.AddToRoleAsync(user, RoleNames.Administrator);
             }
         }
 
@@ -147,41 +155,94 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IdentityResult> Register(string userName, string passwod, string email)
+        public async Task<ReturnResult> Register(string userName, string passwod, string email)
         {
-            var hasUser = _userManager.Users.Where(t => t.UserName == userName).Any();
+            var result = new ReturnResult();
+            var hasUser = await _userManager.Users.Where(t => t.UserName == userName).AnyAsync();
             if (hasUser)
             {
-                var result = IdentityResult.Failed(new IdentityError()
-                {
-                    Description = "已存在此用户"
-                });
+                result.IsSuccess = false;
+                result.Description = "已存在此用户";
                 return result;
             }
+
+            var user = new User { UserName = userName, Email = email };
+            var data = JsonConvert.SerializeObject(new RegisterInfo() { User = user, Passwod = passwod });
+            var DESString = HttpUtility.UrlEncode(EncryptDecryptExtension.DES3Encrypt(data, AppConfig.DESKey));
+            var key = email;
+            var number = await RedisHelper.GetStringIncrAsync(key);
+            if (number >= 3)
+            {
+                result.IsSuccess = false;
+                result.Description = "请勿频繁注册，请查看垃圾邮件或换一个邮箱注册！";
+                Log.Warning("邮箱" + email + "连续注册" + number + "次");
+                return result;
+            }
+            //30分钟内有效(标记邮件激活30分钟内有效)
+            await RedisHelper.SetStringIncrAsync(key, TimeSpan.FromMinutes(30));
+
+            var checkUrl = Request.Scheme + "://" + Request.Host.Value + "/Admin/Account/Activation?desstring=" + DESString;
             EmailHelper emailHelper = new EmailHelper()
             {
                 mailPwd = EmailConfig.Passwod,
                 host = EmailConfig.Host,
                 mailFrom = EmailConfig.From,
                 mailSubject = "欢迎您注册 嗨-博客",
-                mailBody = EmailHelper.tempBody(userName, " 您的激活码：" + "123"),
+                mailBody = EmailHelper.tempBody(userName, "请复制打开链接(或者右键新标签中打开)，激活账号。", "<a style='word-wrap: break-word;word-break: break-all;' href='" + checkUrl + "'>" + checkUrl + "</a>"),
                 mailToArray = new string[] { email }
             };
-            emailHelper.Send();
-
-            var user = new User { UserName = userName, Email = email };
-            await _userManager.CreateAsync(user, passwod);
-            return await _userManager.AddToRoleAsync(user, RoleNames.Average);
+            //发送邮件
+            emailHelper.Send(t =>
+            {
+                Log.Information("邮件发送成功");
+            }, t =>
+            {
+                Log.Information("邮件发送失败");
+            });
+            return result;
         }
 
         /// <summary>
-        /// 根据链接验证注册信息（发送过去的邮件）
+        /// 注册或忘记密码 根据链接验证注册信息（发送过去的邮件）
         /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public async Task<bool> CheckRegister(string url)
+        [HttpPost]
+        public async Task<ReturnResult> CheckUserInfo(string desstring)
         {
-            return true;
+            var result = new ReturnResult();
+            var jsonString = string.Empty;
+            try
+            {
+                //这里有点妖啊。
+                //如果是url直接跳转过来的就不需要HttpUtility.UrlDecode
+                //如果是ajax异步传过来的就需要HttpUtility.UrlDecode
+                jsonString = EncryptDecryptExtension.DES3Decrypt(HttpUtility.UrlDecode(desstring), AppConfig.DESKey);
+            }
+            catch (Exception)
+            {
+                jsonString = EncryptDecryptExtension.DES3Decrypt(desstring, AppConfig.DESKey);
+            }
+            var registerInfo = JsonConvert.DeserializeObject<RegisterInfo>(jsonString);
+            if (!await RedisHelper.KeyExistsAsync(registerInfo.User.Email, RedisTypePrefix.String))
+            {
+                result.IsSuccess = false;
+                result.Description = "激活链接已失效";
+                return result;//
+            }
+            var user = await _userManager.Users.Where(t => t.Email == registerInfo.User.Email).FirstOrDefaultAsync();
+            if (user != null)//修改密码
+            {
+            }
+            else//新增用户
+            {
+                user = registerInfo.User;
+                //http://patrickdesjardins.com/blog/createidentityasync-value-cannot-be-null-when-logging-with-user-created-with-migration-tool
+                user.SecurityStamp = Guid.NewGuid().ToString();//不知道SecurityStamp为什么偶尔报错？？
+                await _userManager.CreateAsync(user, registerInfo.Passwod);
+                await _userManager.AddToRoleAsync(user, RoleNames.Average);
+            }
+            await _signInManager.SignInAsync(user, true);//登录
+            await RedisHelper.DeleteKeyAsync(registerInfo.User.Email, RedisTypePrefix.String);//删除缓存，使验证过的邮件失效
+            return result;
         }
     }
 }

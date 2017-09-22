@@ -15,17 +15,25 @@ namespace HiBlogs.EntityFramework.EntityFramework
         {
         }
 
-        private string _connection;
-        public HiBlogsDbContext(string connection) => _connection = connection;     
+        private string connection;
+        public HiBlogsDbContext(string connection) => this.connection = connection;     
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!string.IsNullOrWhiteSpace(_connection))
-                optionsBuilder.UseMySql(_connection);
+            if (!string.IsNullOrWhiteSpace(connection))
+                optionsBuilder.UseMySql(connection);
 
         }
 
         public DbSet<Blog> Blogs { get; set; }
-        public DbSet<RolePermissionName> RolePermissionNames { get; set; }        
+        public DbSet<RolePermissionName> RolePermissionNames { get; set; }
+
+        public DbSet<BlogBlogTag> BlogBlogTags { get; set; }
+        public DbSet<BlogBlogType> BlogBlogTypes { get; set; }
+        public DbSet<BlogTag> BlogTags { get; set; }
+        public DbSet<BlogType> BlogTypes { get; set; }
+        public DbSet<Remark> Remarks { get; set; }
+
+        public DbSet<ReplyRemark> ReplyRemarks { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
 
@@ -141,9 +140,9 @@ namespace HiBlogs.Infrastructure
 </div>
 ";
         }
-         
+
         #endregion
-      
+
         /// <summary>
         /// 邮件发送
         /// </summary>
@@ -194,6 +193,7 @@ namespace HiBlogs.Infrastructure
 
             myMail.IsBodyHtml = isbodyHtml;
 
+
             //在有附件的情况下添加附件
             try
             {
@@ -216,7 +216,7 @@ namespace HiBlogs.Infrastructure
             //指定发件人的邮件地址和密码以验证发件人身份
             smtp.Credentials = new System.Net.NetworkCredential(mailFrom, mailPwd);//115                 //设置SMTP邮件服务器
             smtp.Host = host;
-
+            smtp.Port = 80;
             try
             {
                 //将邮件发送到SMTP邮件服务器
@@ -226,10 +226,10 @@ namespace HiBlogs.Infrastructure
                 return true;
 
             }
-            catch (System.Net.Mail.SmtpException ex)
+            catch (SmtpException ex)
             {
-                if (CallFailure != null)
-                    CallFailure(myMail);
+                if (CallFailure != null)            
+                     CallFailure(myMail);                
                 return false;
             }
 

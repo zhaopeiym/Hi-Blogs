@@ -1,8 +1,5 @@
-﻿using HiBlogs.Core.AuditedEntitys;
-using HiBlogs.Core.Entities;
-using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace HiBlogs.Core.Entities
 {
@@ -12,6 +9,13 @@ namespace HiBlogs.Core.Entities
         /// 第三方登录唯一标识
         /// </summary>
         public string OpenId { get; set; }
+        /// <summary>
+        /// 昵称
+        /// </summary>
         public string Nickname { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreationTime { get; set; } = DateTime.Now;
     }
 }

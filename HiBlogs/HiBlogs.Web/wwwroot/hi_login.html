@@ -27,7 +27,7 @@
         $.post("/api/Account/GetOAuthUser", { "code": $.queryString("code"), "type": $.queryString("state") }, function (obj) {
             debugger
             try {
-                if (window.opener.location.href.indexOf("haojima.net/Admin/Account/Login") >= 0)
+                if (window.opener.location.href.indexOf("haojima.net/Admin/Account/") >= 0)
                     window.opener.location.href = "/";
                 else
                     window.opener.location.reload(true);//强制刷新

@@ -5,18 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20170827075427_db1.cs" />
-    <Compile Remove="Migrations\20170827075427_db1.Designer.cs" />
-    <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot--.cs" />
-    <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot-dev.cs" />
-    <Compile Remove="Migrations\HiBlogsDbContextModelSnapshot-r.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0-rtm-10058" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.1.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

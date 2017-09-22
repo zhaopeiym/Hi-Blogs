@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "激活";
+}
+
+<div class="mesg red" style="font-size:35px;
+font-weight:800;margin:200px auto;text-align:center;">正在验证激活...</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajax({
+                url: "/Api/Account/CheckUserInfo",
+                type: "post",
+                data: {
+                    "desstring": $.queryString("desstring"),
+                },
+                success: function (sData) {
+                    if (!sData.isSuccess) {
+                        $(".mesg").html(sData.description);
+                    }
+                    else {
+                        location.href = "/";
+                    }
+                }
+            });
+        })
+    </script>
+}

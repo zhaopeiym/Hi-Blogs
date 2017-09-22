@@ -25,3 +25,8 @@
 /HiBlogs/XUnitTestBlogsMigration/obj
 /HiBlogs/HiBlogs.Definitions/bin
 /HiBlogs/HiBlogs.Definitions/obj
+/HiBlogs/Hiblogs.Redis/obj
+/HiBlogs/Hiblogs.Redis/bin
+/HiBlogs/Hiblogs.Redis.Tests/obj
+/HiBlogs/Hiblogs.Redis.Tests/bin
+/HiBlogs/HiBlogs.Web/logs

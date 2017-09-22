@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "日志";
+}
+@model List<string>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li><a href="/Admin/Audit/GetLogInfo?fileName=@item">@item</a></li>
+    }
+</ul>

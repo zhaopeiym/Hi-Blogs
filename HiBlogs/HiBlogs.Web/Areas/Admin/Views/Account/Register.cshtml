@@ -170,12 +170,12 @@
                     type: "post",
                     data: { "userName": $(".userName").val(), "passwod": $(".passwod").val(), "email": $(".mail").val() },
                     success: function (sData) {
-                        if (sData.succeeded) {
-                            alert("注册成功");
+                        if (sData.isSuccess) {
+                            alert("已发送激活链接到邮箱，请尽快激活。");
                             location.href = "/";
                         }
                         else {
-                            alert(sData.errors[0].description);
+                            alert(sData.description);
                         }
                     }
                 });

@@ -30,7 +30,7 @@ namespace HiBlogs.EntityFramework.Migrations
 
                     b.Property<DateTime>("CreationTime");
 
-                    b.Property<int?>("CreatorUserId");
+                    b.Property<int>("CreatorUserId");
 
                     b.Property<int?>("DeleterUserId");
 
@@ -38,19 +38,145 @@ namespace HiBlogs.EntityFramework.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsForwarding");
+
+                    b.Property<bool>("IsHome");
+
+                    b.Property<bool>("IsMyHome");
+
                     b.Property<DateTime?>("LastModificationTime");
 
                     b.Property<long?>("LastModifierUserId");
 
                     b.Property<string>("OldPublishTiem");
 
+                    b.Property<int>("ReadNumber");
+
+                    b.Property<int>("RemarksNumber");
+
                     b.Property<string>("Title");
 
                     b.Property<string>("Url");
 
+                    b.Property<int>("UserId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogBlogTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BlogId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("BlogBlogTag");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogBlogType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BlogId");
+
+                    b.Property<int>("TypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("BlogBlogType");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorUserId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Remark");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BlogTag");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorUserId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Remark");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorUserId");
+
+                    b.ToTable("BlogType");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.Remark", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BlogId");
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("CreatorUserId");
+
+                    b.Property<int?>("DeleterUserId");
+
+                    b.Property<DateTime?>("DeletionTime");
+
+                    b.Property<string>("IP");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<long?>("LastModifierUserId");
+
+                    b.Property<bool>("Top");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("Remark");
                 });
 
             modelBuilder.Entity("HiBlogs.Core.Entities.Role", b =>
@@ -101,6 +227,8 @@ namespace HiBlogs.EntityFramework.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime>("CreationTime");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -225,6 +353,64 @@ namespace HiBlogs.EntityFramework.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.Blog", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogBlogTag", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.Blog", "Blog")
+                        .WithMany("BlogBlogTags")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HiBlogs.Core.Entities.BlogTag", "BlogTag")
+                        .WithMany("BlogBlogTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogBlogType", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.Blog", "Blog")
+                        .WithMany("BlogBlogTypes")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HiBlogs.Core.Entities.BlogType", "BlogType")
+                        .WithMany("BlogBlogTypes")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogTag", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.BlogType", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("CreatorUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HiBlogs.Core.Entities.Remark", b =>
+                {
+                    b.HasOne("HiBlogs.Core.Entities.Blog", "Blog")
+                        .WithMany("Remarks")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HiBlogs.Core.Entities.RolePermissionName", b =>

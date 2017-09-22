@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Views\Home\" />
+    <Folder Include="logs\" />
+    <Folder Include="Views\UserBlog\" />
   </ItemGroup>
 
 </Project>

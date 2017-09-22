@@ -4,7 +4,11 @@ using System.Text;
 
 namespace HiBlogs.Core.AuditedEntitys
 {
-    public abstract class FullAuditedEntity<TKey> : ModifyAuditedEntity<TKey>
+    /// <summary>
+    /// 软删除
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    public abstract class DeleterAuditedEntity<TKey> : ModifyAuditedEntity<TKey>
     {
         /// <summary>
         /// 是否被删除

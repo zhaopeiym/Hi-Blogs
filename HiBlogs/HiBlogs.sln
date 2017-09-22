@@ -27,7 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{CB840DF8-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.Definitions", "HiBlogs.Definitions\HiBlogs.Definitions.csproj", "{4685F977-D32F-412C-A2EB-0FBB637BA633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiBlogs.WebApi", "HiBlogs.WebApi\HiBlogs.WebApi.csproj", "{0D1E26D1-306B-46E5-939C-F02638BCA6E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiBlogs.WebApi", "HiBlogs.WebApi\HiBlogs.WebApi.csproj", "{0D1E26D1-306B-46E5-939C-F02638BCA6E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hiblogs.Redis", "Hiblogs.Redis\Hiblogs.Redis.csproj", "{0F8B6D7F-4743-4831-BCAF-3016385D6C66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hiblogs.Redis.Tests", "Hiblogs.Redis.Tests\Hiblogs.Redis.Tests.csproj", "{F45B057D-7695-4B3D-AD51-593DB595D68F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,14 @@ Global
 		{0D1E26D1-306B-46E5-939C-F02638BCA6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D1E26D1-306B-46E5-939C-F02638BCA6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D1E26D1-306B-46E5-939C-F02638BCA6E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F8B6D7F-4743-4831-BCAF-3016385D6C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F8B6D7F-4743-4831-BCAF-3016385D6C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F8B6D7F-4743-4831-BCAF-3016385D6C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F8B6D7F-4743-4831-BCAF-3016385D6C66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F45B057D-7695-4B3D-AD51-593DB595D68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45B057D-7695-4B3D-AD51-593DB595D68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45B057D-7695-4B3D-AD51-593DB595D68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45B057D-7695-4B3D-AD51-593DB595D68F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +96,7 @@ Global
 		{DF1ECE70-716D-47BD-B32E-CBAD7879ED35} = {EBB385D5-31AB-45B4-916A-BFE19DC94AA9}
 		{1DDB327B-FBA0-4993-AC33-BC93BFD56DCE} = {EBB385D5-31AB-45B4-916A-BFE19DC94AA9}
 		{626CA33E-7174-4FF0-8852-C1B5B42575AB} = {1DDB327B-FBA0-4993-AC33-BC93BFD56DCE}
+		{F45B057D-7695-4B3D-AD51-593DB595D68F} = {CB840DF8-27F4-401A-9BF3-0D3CB74B5F42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CC1F8733-9EFA-46F7-BFAB-43A001C225E7}

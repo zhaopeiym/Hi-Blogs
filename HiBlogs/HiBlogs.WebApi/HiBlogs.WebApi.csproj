@@ -5,16 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\Authorization\**" />
-    <Compile Remove="Api\Models\**" />
-    <EmbeddedResource Remove="Api\Authorization\**" />
-    <EmbeddedResource Remove="Api\Models\**" />
-    <None Remove="Api\Authorization\**" />
-    <None Remove="Api\Models\**" />
+    <Compile Remove="Admin\Authorization\**" />
+    <Compile Remove="Admin\Models\**" />
+    <EmbeddedResource Remove="Admin\Authorization\**" />
+    <EmbeddedResource Remove="Admin\Models\**" />
+    <None Remove="Admin\Authorization\**" />
+    <None Remove="Admin\Models\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.1.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Talk.OAuthClient" Version="1.0.0" />
   </ItemGroup>
 
@@ -23,6 +26,7 @@
     <ProjectReference Include="..\HiBlogs.Application\HiBlogs.Application.csproj" />
     <ProjectReference Include="..\HiBlogs.Core\HiBlogs.Core.csproj" />
     <ProjectReference Include="..\HiBlogs.EntityFramework\HiBlogs.EntityFramework.csproj" />
+    <ProjectReference Include="..\Hiblogs.Redis\Hiblogs.Redis.csproj" />
   </ItemGroup>  
 
 </Project>
