@@ -105,7 +105,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <returns></returns>
         public string GetOAuthQQUrl()
         {
-            return accountAppService.GetOAuthClient(AuthType.QQ).GetAuthUrl();
+            return accountAppService.GetOAuthClient(AuthType.QQ, Request).GetAuthUrl();
         }
         /// <summary>
         /// 获取社交帐号认证地址[新浪]
@@ -113,7 +113,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <returns></returns>
         public string GetOAuthSinaUrl()
         {
-            return accountAppService.GetOAuthClient(AuthType.Sina).GetAuthUrl();
+            return accountAppService.GetOAuthClient(AuthType.Sina, Request).GetAuthUrl();
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace HiBlogs.WebApi.Api.Controllers
                     authType = AuthType.Sina;
                     break;
             }
-            var client = accountAppService.GetOAuthClient(authType);
+            var client = accountAppService.GetOAuthClient(authType, Request);
             var accessToken = await client.GetAccessToken(code);
 
             var user = await dbContext.Users.Where(t => t.OpenId == accessToken.UserId).FirstOrDefaultAsync();

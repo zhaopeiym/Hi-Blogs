@@ -1,6 +1,8 @@
 # Hi-Blogs
 
 ## 嗨博客，基于ASP.NET Core2.0的跨平台的免费开源博客系统  
+- 演示地址：https://haojima.net/
+- 意见和建议：https://github.com/zhaopeiym/Hi-Blogs/issues
 
 ## 使用到的相关平台、技术和工具
 - ASP.NET Core2.0     （底层框架）

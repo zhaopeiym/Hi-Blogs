@@ -41,13 +41,13 @@ namespace HiBlogs.Web.Areas.Admin.Controllers
 
         public IActionResult GetOAuthQQUrl()
         {
-            var url = accountAppService.GetOAuthClient(AuthType.QQ).GetAuthUrl();
+            var url = accountAppService.GetOAuthClient(AuthType.QQ, Request).GetAuthUrl();
             return Redirect(url);
         }
 
         public IActionResult GetOAuthSinaUrl()
         {
-            var url = accountAppService.GetOAuthClient(AuthType.Sina).GetAuthUrl();
+            var url = accountAppService.GetOAuthClient(AuthType.Sina,Request).GetAuthUrl();
             return Redirect(url);
         }
 
