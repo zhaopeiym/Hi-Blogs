@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HiBlogs.Definitions\HiBlogs.Definitions.csproj" />
+    <ProjectReference Include="..\HiBlogs.Infrastructure\HiBlogs.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

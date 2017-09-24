@@ -26,7 +26,7 @@
             *@
             @if (User.Identity.IsAuthenticated)
             {
-                <span>@User.Identity.Name</span>
+                <span>@ViewBag.userNickname</span>
                 <button class="btn-logoff">安全退出</button>
             }
             else

@@ -43,8 +43,9 @@ namespace HiBlogs.Web
             var assemblyWeb = Assembly.GetExecutingAssembly();
             var assemblyApplication = ApplicationModule.GetAssembly();
 
-            // 自动注入
+            //自动注入当前程序集中的类型
             AutoInjection(services, assemblyApplication);
+            //自动注入Application程序集中的类型
             AutoInjection(services, assemblyWeb);
             // 日志配置
             LogConfig();
@@ -105,51 +106,81 @@ namespace HiBlogs.Web
         /// </summary>
         private void AutoInjection(IServiceCollection services, Assembly assembly)
         {
+            var types = assembly.GetTypes();
+
+            #region ISingletonDependency
             //获取标记了ISingletonDependency接口的接口
-            var singletonInterfaceDependency = assembly.GetTypes()
+            var singletonInterfaceDependency = types
                     .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
                     .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ISingletonDependency")))
                     .ToList();
-            //获取标记了ISingletonDependency接口的类
-            var singletonTypeDependency = assembly.GetTypes()
-                    .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
-                    .ToList();
-
-            //获取标记了ITransientDependency接口的接口
-            var transientInterfaceDependency = assembly.GetTypes()
-                   .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
-                   .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ITransientDependency")))
-                   .ToList();
-            //获取标记了ITransientDependency接口的类
-            var transientTypeDependency = assembly.GetTypes()
-                    .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
-                    .ToList();
-            
             //自动注入标记了 ISingletonDependency接口的 接口
             foreach (var interfaceName in singletonInterfaceDependency)
             {
-                var type = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                var type = types.Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
                 if (type != null)
                     services.AddSingleton(interfaceName, type);
             }
+
+            //获取标记了ISingletonDependency接口的类
+            var singletonTypeDependency = types
+                    .Where(t => t.GetInterfaces().Contains(typeof(ISingletonDependency)))
+                    .ToList();
             //自动注入标记了 ISingletonDependency接口的 类
             foreach (var type in singletonTypeDependency)
-            {             
+            {
                 services.AddSingleton(type, type);
             }
+            #endregion
 
+            #region ITransientDependency
+            //获取标记了ITransientDependency接口的接口
+            var transientInterfaceDependency = types
+                   .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
+                   .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".ITransientDependency")))
+                   .ToList();
             //自动注入标记了 ITransientDependency接口的 接口
             foreach (var interfaceName in transientInterfaceDependency)
             {
-                var type = assembly.GetTypes().Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                var type = types.Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
                 if (type != null)
                     services.AddTransient(interfaceName, type);
             }
+            //获取标记了ITransientDependency接口的类
+            var transientTypeDependency = types
+                    .Where(t => t.GetInterfaces().Contains(typeof(ITransientDependency)))
+                    .ToList();
             //自动注入标记了 ITransientDependency接口的 类
             foreach (var type in transientTypeDependency)
             {
                 services.AddTransient(type, type);
             }
+            #endregion
+
+            #region IScopedDependency
+            //获取标记了IScopedDependency接口的接口
+            var scopedInterfaceDependency = types
+                   .Where(t => t.GetInterfaces().Contains(typeof(IScopedDependency)))
+                   .SelectMany(t => t.GetInterfaces().Where(f => !f.FullName.Contains(".IScopedDependency")))
+                   .ToList();
+            //自动注入标记了 IScopedDependency接口的 接口
+            foreach (var interfaceName in scopedInterfaceDependency)
+            {
+                var type = types.Where(t => t.GetInterfaces().Contains(interfaceName)).FirstOrDefault();
+                if (type != null)
+                    services.AddScoped(interfaceName, type);
+            }
+
+            //获取标记了IScopedDependency接口的类
+            var scopedTypeDependency = types
+                    .Where(t => t.GetInterfaces().Contains(typeof(IScopedDependency)))
+                    .ToList();
+            //自动注入标记了 IScopedDependency接口的 类
+            foreach (var type in scopedTypeDependency)
+            {
+                services.AddScoped(type, type);
+            } 
+            #endregion
         }
 
         /// <summary>

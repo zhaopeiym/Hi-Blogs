@@ -170,9 +170,8 @@
                         "returnUrl": $.queryString("ReturnUrl")
                     },
                     success: function (sData) {
-                        debugger
-                        if (sData !== "false") {
-                            location.href = sData && decodeURIComponent(sData) || "/";
+                        if (sData.isSuccess) {
+                            location.href = sData.returnUrl && decodeURIComponent(sData.returnUrl) || "/";
                         }
                         else
                             location.reload(true);

@@ -5,9 +5,9 @@ using System.Text;
 namespace HiBlogs.Definitions.Dependency
 {
     /// <summary>
-    /// 瞬时（每次都重新实例）
+    /// 一个请求内唯一（线程内唯一）
     /// </summary>
-    public interface ITransientDependency
+    public interface IScopedDependency
     {
     }
 }

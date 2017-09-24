@@ -8,10 +8,12 @@ using HiBlogs.Web.Models;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Application;
 using HiBlogs.Definitions.Config;
+using System.Threading;
+using System.Security.Claims;
 
 namespace HiBlogs.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : MvcBaseController
     {
         private readonly HiBlogsDbContext db;
         public HomeController(HiBlogsDbContext db)
@@ -22,11 +24,12 @@ namespace HiBlogs.Web.Controllers
         public IActionResult Index()
         {
             var blogInfos = db.Blogs.OrderByDescending(t => t.OldPublishTiem)
-                .Select(t => new BlogInfoViewModel
-                {
-                    Title = t.Title,
-                    Id = t.Id
-                }).ToList();         
+                   .Select(t => new BlogInfoViewModel
+                   {
+                       Title = t.Title,
+                       Id = t.Id
+                   }).ToList();
+            ViewBag.userNickname = string.IsNullOrWhiteSpace(HiSession.UserNickname) ? HiSession.UsreName : HiSession.UserNickname;
             return View(blogInfos);
         }
 

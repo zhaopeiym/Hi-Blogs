@@ -3,10 +3,13 @@ using HiBlogs.Application.Admin;
 using HiBlogs.Core.Entities;
 using HiBlogs.Definitions;
 using HiBlogs.Definitions.Config;
+using HiBlogs.Definitions.HiClaimTypes;
 using HiBlogs.EntityFramework.EntityFramework;
 using HiBlogs.Infrastructure;
 using HiBlogs.Infrastructure.Models;
 using HiBlogs.WebApi.Api.Controllers.Dto;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +17,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using Talk.OAuthClient;
@@ -25,10 +28,10 @@ namespace HiBlogs.WebApi.Api.Controllers
     [Route("api/[controller]/[Action]")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly HiBlogsDbContext _dbContext;
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly SignInManager<User> signInManager;
+        private readonly HiBlogsDbContext dbContext;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
         private readonly AccountAppService accountAppService;
 
         public AccountController(SignInManager<User> signInManager,
@@ -36,10 +39,10 @@ namespace HiBlogs.WebApi.Api.Controllers
             UserManager<User> userManager,
             RoleManager<Role> roleManager)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _dbContext = hiBlogsDbContext;
-            _roleManager = roleManager;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            dbContext = hiBlogsDbContext;
+            this.roleManager = roleManager;
             accountAppService = new AccountAppService();
         }
 
@@ -51,14 +54,29 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <param name="rememberMe">是否记住密码</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<string> Login(string userName, string passwod, bool rememberMe, string returnUrl = null)
+        public async Task<ReturnResult> Login(string userName, string passwod, bool rememberMe, string returnUrl = null)
         {
-            var result = await _signInManager.PasswordSignInAsync(userName, passwod, rememberMe, lockoutOnFailure: false);
+            var returnResult = new ReturnResult();
+            var user = await userManager.Users.Where(t => t.UserName == userName).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                returnResult.IsSuccess = false;
+                returnResult.Description = "不存在此用户";
+                return returnResult;
+            }
+            var result = await signInManager.PasswordSignInAsync(user, passwod, rememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return returnUrl;
+                var userPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                userPrincipal.Identities.First().AddClaim(new Claim(HiClaimTypes.Nickname, user.Nickname ?? ""));
+                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(userPrincipal), new Microsoft.AspNetCore.Authentication.AuthenticationProperties());
+                returnResult.ReturnUrl = returnUrl;
+                return returnResult;
             }
-            return "false";
+            returnResult.IsSuccess = false;
+            returnResult.Description = "登录失败";
+            return returnResult;
         }
 
         /// <summary>
@@ -67,17 +85,17 @@ namespace HiBlogs.WebApi.Api.Controllers
         /// <returns></returns>
         public async Task InitData()
         {
-            if (!_dbContext.Users.Any())
+            if (!dbContext.Users.Any())
             {
                 var roleAdministrator = new Role { Name = RoleNames.Administrator };
                 var roleAdmin = new Role { Name = RoleNames.Admin };
                 var roleAverage = new Role { Name = RoleNames.Average };
-                await _roleManager.CreateAsync(roleAdministrator);
-                await _roleManager.CreateAsync(roleAdmin);
-                await _roleManager.CreateAsync(roleAverage);
+                await roleManager.CreateAsync(roleAdministrator);
+                await roleManager.CreateAsync(roleAdmin);
+                await roleManager.CreateAsync(roleAverage);
                 var user = new User { UserName = "Administrator", Email = "Administrator@haojima.net" };
-                var createUserResult = await _userManager.CreateAsync(user, "123qwe");
-                var addRoleResult = await _userManager.AddToRoleAsync(user, RoleNames.Administrator);
+                var createUserResult = await userManager.CreateAsync(user, "123qwe");
+                var addRoleResult = await userManager.AddToRoleAsync(user, RoleNames.Administrator);
             }
         }
 
@@ -118,7 +136,7 @@ namespace HiBlogs.WebApi.Api.Controllers
             var client = accountAppService.GetOAuthClient(authType);
             var accessToken = await client.GetAccessToken(code);
 
-            var user = await _dbContext.Users.Where(t => t.OpenId == accessToken.UserId).FirstOrDefaultAsync();
+            var user = await dbContext.Users.Where(t => t.OpenId == accessToken.UserId).FirstOrDefaultAsync();
             if (user == null)
             {
                 var accessUser = await client.GetUserInfo(accessToken);
@@ -129,10 +147,13 @@ namespace HiBlogs.WebApi.Api.Controllers
                     Email = DateTime.Now.Ticks.ToString() + "@temp.com",
                     Nickname = accessUser.Name
                 };
-                var temp = await _userManager.CreateAsync(user, accessUser.Id.ToLower() + "temp");
-                await _userManager.AddToRoleAsync(user, RoleNames.Average);
+                var temp = await userManager.CreateAsync(user, accessUser.Id.ToLower() + "temp");
+                await userManager.AddToRoleAsync(user, RoleNames.Average);
             }
-            await _signInManager.SignInAsync(user, true);
+            await signInManager.SignInAsync(user, true);
+            var userPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+            userPrincipal.Identities.First().AddClaim(new Claim(HiClaimTypes.Nickname, user.Nickname ?? ""));
+            await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(userPrincipal), new AuthenticationProperties());
 
             return accessToken;
         }
@@ -144,7 +165,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         [HttpPost]
         public async Task LogOff()
         {
-            await _signInManager.SignOutAsync();
+            await signInManager.SignOutAsync();
         }
 
         /// <summary>
@@ -158,7 +179,7 @@ namespace HiBlogs.WebApi.Api.Controllers
         public async Task<ReturnResult> Register(string userName, string passwod, string email)
         {
             var result = new ReturnResult();
-            var hasUser = await _userManager.Users.Where(t => t.UserName == userName).AnyAsync();
+            var hasUser = await userManager.Users.Where(t => t.UserName == userName).AnyAsync();
             if (hasUser)
             {
                 result.IsSuccess = false;
@@ -228,7 +249,7 @@ namespace HiBlogs.WebApi.Api.Controllers
                 result.Description = "激活链接已失效";
                 return result;//
             }
-            var user = await _userManager.Users.Where(t => t.Email == registerInfo.User.Email).FirstOrDefaultAsync();
+            var user = await userManager.Users.Where(t => t.Email == registerInfo.User.Email).FirstOrDefaultAsync();
             if (user != null)//修改密码
             {
             }
@@ -237,10 +258,10 @@ namespace HiBlogs.WebApi.Api.Controllers
                 user = registerInfo.User;
                 //http://patrickdesjardins.com/blog/createidentityasync-value-cannot-be-null-when-logging-with-user-created-with-migration-tool
                 user.SecurityStamp = Guid.NewGuid().ToString();//不知道SecurityStamp为什么偶尔报错？？
-                await _userManager.CreateAsync(user, registerInfo.Passwod);
-                await _userManager.AddToRoleAsync(user, RoleNames.Average);
+                await userManager.CreateAsync(user, registerInfo.Passwod);
+                await userManager.AddToRoleAsync(user, RoleNames.Average);
             }
-            await _signInManager.SignInAsync(user, true);//登录
+            await signInManager.SignInAsync(user, true);//登录
             await RedisHelper.DeleteKeyAsync(registerInfo.User.Email, RedisTypePrefix.String);//删除缓存，使验证过的邮件失效
             return result;
         }

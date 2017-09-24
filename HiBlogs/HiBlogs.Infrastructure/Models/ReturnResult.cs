@@ -13,15 +13,16 @@ namespace HiBlogs.Infrastructure.Models
         /// 是否成功
         /// </summary>
         public bool IsSuccess { get; set; } = true;//默认是成功
+
         /// <summary>
         /// 描述
         /// </summary>
         public string Description { get; set; }
-
+      
         /// <summary>
         /// 异常消息
         /// </summary>
-        public string Err { get; set; }
+        public List<string> Errors { get; set; }
 
         /// <summary>
         /// 回调地址
